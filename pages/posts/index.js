@@ -1,20 +1,16 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 
-const data = [
-  {
-    title: '标题1',
-    id: '1',
-    content: '## 正文',
-  },
-  {
-    title: '标题2',
-    id: '2',
-    content: '## 正文2',
-  },
-]
+const fetcher = (url) => fetch(url).then((res) => res.json())
 
 export default function IndexPage() {
+  const [data, setData] = useState([])
+  useEffect(() => {
+    fetcher('/api/posts').then((res) => {
+      setData(res)
+    })
+  }, [])
   return (
     <div>
       <Head>
