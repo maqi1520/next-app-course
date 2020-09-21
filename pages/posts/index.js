@@ -23,12 +23,13 @@ export default function IndexPage({ data = [] }) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const data = await fetcher(`${process.env.API_URL}/posts`)
 
   return {
     props: {
       data,
     },
+    revalidate: 1,
   }
 }
