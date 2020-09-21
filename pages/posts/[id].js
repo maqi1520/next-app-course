@@ -20,7 +20,7 @@ export default function IndexPage({ data = {} }) {
 
 export async function getServerSideProps(res) {
   const { id } = res.query
-  const data = await fetcher(`http://localhost:3000/api/posts/${id}`)
+  const data = await fetcher(`${process.env.API_URL}/posts/${id}`)
 
   return {
     props: {

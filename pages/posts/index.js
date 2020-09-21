@@ -24,7 +24,7 @@ export default function IndexPage({ data = [] }) {
 }
 
 export async function getServerSideProps() {
-  const data = await fetcher('http://localhost:3000/api/posts')
+  const data = await fetcher(`${process.env.API_URL}/posts`)
 
   return {
     props: {
