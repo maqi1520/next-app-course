@@ -4,19 +4,7 @@ import { useState, useEffect } from 'react'
 
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
-export default function IndexPage() {
-  const router = useRouter()
-  const { id } = router.query
-
-  const [data, setData] = useState({})
-
-  useEffect(() => {
-    id &&
-      fetcher(`/api/posts/${id}`).then((res) => {
-        setData(res)
-      })
-  }, [id])
-
+export default function IndexPage({ data = {} }) {
   if (!data.id) return <div>Loading...</div>
 
   return (
@@ -28,4 +16,15 @@ export default function IndexPage() {
       <div>{data.content}</div>
     </div>
   )
+}
+
+export async function getServerSideProps(res) {
+  const { id } = res.query
+  const data = await fetcher(`http://localhost:3000/api/posts/${id}`)
+
+  return {
+    props: {
+      data,
+    },
+  }
 }

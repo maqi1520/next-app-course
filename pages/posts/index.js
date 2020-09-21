@@ -1,16 +1,9 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
 
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
-export default function IndexPage() {
-  const [data, setData] = useState([])
-  useEffect(() => {
-    fetcher('/api/posts').then((res) => {
-      setData(res)
-    })
-  }, [])
+export default function IndexPage({ data = [] }) {
   return (
     <div>
       <Head>
@@ -19,7 +12,7 @@ export default function IndexPage() {
       <h1>posts list</h1>
       <ul>
         {data.map((item) => (
-          <li>
+          <li key={item.id}>
             <Link href="/posts/[id]" as={`/posts/${item.id}`}>
               <a>{item.title}</a>
             </Link>
@@ -28,4 +21,14 @@ export default function IndexPage() {
       </ul>
     </div>
   )
+}
+
+export async function getServerSideProps() {
+  const data = await fetcher('http://localhost:3000/api/posts')
+
+  return {
+    props: {
+      data,
+    },
+  }
 }
