@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import markdownToHtml from '../../lib/markdownToHtml'
 
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
@@ -11,7 +12,7 @@ export default function IndexPage({ data = {} }) {
         <title>{`${data.title}-posts detail`}</title>
       </Head>
       <h1>{data.title}</h1>
-      <div>{data.content}</div>
+      <div dangerouslySetInnerHTML={{ __html: data.content || '' }} />
     </div>
   )
 }
@@ -32,10 +33,14 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const data = await fetcher(`${process.env.API_URL}/posts/${params.id}`)
+  const content = await markdownToHtml(data.content || '')
 
   return {
     props: {
-      data,
+      data: {
+        ...data,
+        content,
+      },
     },
     revalidate: 1, //当下次请求时，重新验证生成静态页面
   }
