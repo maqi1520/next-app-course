@@ -10,6 +10,11 @@ export default function IndexPage({ data = [] }) {
         <title>posts list</title>
       </Head>
       <h1>posts list</h1>
+      <div>
+        <Link href="/posts/create">
+          <button>create</button>
+        </Link>
+      </div>
       <ul>
         {data.map((item) => (
           <li key={item.id}>
